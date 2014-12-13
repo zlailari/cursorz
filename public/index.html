@@ -77,7 +77,7 @@
                     // left or a
                     case 37:
                     case 65:
-                        angle += 3;
+                        angle += 3;//with+=3, it rotates clockwise; switch this?
                         socket.emit('spin', angle);
                         break;
                     // up or w
@@ -88,7 +88,7 @@
                     // right or d
                     case 39:
                     case 68:
-                        angle -= 3;
+                        angle -= 3;//currently rotates counter-clockwise
                         socket.emit('spin', angle);
                         break;
                     // down or s
@@ -99,7 +99,7 @@
                 }
             })
 
-            $(document).click(function(event){
+            $(document).click(function(event){//we should implement the space bar as a shooter too so you can move whole shooting using a laptop
                 socket.emit('fire', x, y, angle);
             });
 
