@@ -77,7 +77,7 @@
                     // left or a
                     case 37:
                     case 65:
-                        angle += 3;//with+=3, it rotates clockwise; switch this?
+                        angle -= 5;//rotates counterclockwise
                         socket.emit('spin', angle);
                         break;
                     // up or w
@@ -88,7 +88,7 @@
                     // right or d
                     case 39:
                     case 68:
-                        angle -= 3;//currently rotates counter-clockwise
+                        angle += 5;//rotates clockwise
                         socket.emit('spin', angle);
                         break;
                     // down or s
