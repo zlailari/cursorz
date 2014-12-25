@@ -1,122 +1,14 @@
 <!doctype html>
 <html>
     <head>
-        <title>Socket.IO chat</title>
+        <title>Wow, Cursorz</title>
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     </head>
-
     <body>
         <canvas id="myCanvas"></canvas>
-        <script>
-            var socket = io();
-
-            // make canvas full screen
-            var canvas = document.getElementById('myCanvas');
-            var ctx = canvas.getContext('2d');
-            ctx.canvas.width = window.innerWidth;
-            ctx.canvas.height = window.innerHeight;
-
-            // hide your real cursor
-            ctx.canvas.style.cursor = "none";
-
-            // cursor setup
-            var cursorPic = new Image();
-            cursorPic.src = 'img/cursorimg.png';
-            var width = 13;
-            var height = 20;
-
-            // id from server
-            var myId;
-
-            // angle of your cursor
-            var angle = 0;
-            var RADIANS = Math.PI/180;
-
-            // don't think this does anything, to delete
-            // jQuery(document).ready(function() {
-            //     var currentDeg=0;
-            //     document.body.style.cursor("-transform","rotate(" + (currentDeg+50) + "deg)");
-            // });
-
-
-            function render(allLocations, allBullets){
-                ctx.fillStyle = "#000";
-                ctx.fillRect(0,0, ctx.canvas.width, ctx.canvas.height);
-                ctx.fillStyle = "#FFF";
-
-                for(var location in allLocations){
-                    // if(location !== myId){
-                        drawRotatedImage(cursorPic, allLocations[location].x, allLocations[location].y, width, height, allLocations[location].angle);
-                        // ctx.drawImage(cursorPic, allLocations[location].x, allLocations[location].y, width, height);
-                    // }
-                }
-                for (var bullet in allBullets){
-                    ctx.fillStyle = "#FF0000";
-                    ctx.fillRect(allBullets[bullet].x, allBullets[bullet].y, 4, 8);
-                }
-            }
-
-            function drawRotatedImage(image, x, y, height, width, angle) {
-                // stores current coordinate system
-                ctx.save();
-
-                // shift coordinate system, rotate, draw
-                ctx.translate(x,y);
-                ctx.rotate(angle * RADIANS);
-                ctx.drawImage(image, 0, 0, height, width);
-
-                // return to old coorginate system
-                ctx.restore();
-            }
-
-            $(document).bind('keydown', function(e) {
-                var code = e.keyCode || e.which;
-                console.log(code);
-                switch(code) {
-                    // left or a
-                    case 37:
-                    case 65:
-                        angle += 3;
-                        socket.emit('spin', angle);
-                        break;
-                    // up or w
-                    case 38:
-                    case 87:
-                        // do nothing for now
-                        break;
-                    // right or d
-                    case 39:
-                    case 68:
-                        angle -= 3;
-                        socket.emit('spin', angle);
-                        break;
-                    // down or s
-                    case 40:
-                    case 83:
-                        //do nothing for now
-                        break;
-                }
-            })
-
-            $(document).click(function(event){
-                socket.emit('fire', x, y, angle);
-            });
-
-            $(document).mousemove(function(event) {
-                x = event.clientX;
-                y = event.clientY;
-                socket.emit('coords', x, y);
-            });
-
-            socket.on('update', function(allLocations, allBullets){
-                render(allLocations, allBullets);
-
-            });
-
-            socket.on('init', function(id){
-                myId = id;
-            });
-        </script>
+        <script type="text/javascript", src="javascript/Cursor.js"></script>
+        <script type="text/javascript", src="javascript/Bullet.js"></script>        
+        <script type="text/javascript", src="javascript/gamecore.js"></script>
     </body>
 </html>
