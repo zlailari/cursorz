@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var updateRate = 30; // in ms
-var lastTime = Date.now();
+var lastTime = Date.now()sadfasdf more breaking;
 
 // cursor locations/angles
 var allCursors={}sdfadfsd breaking this;
