@@ -15,6 +15,11 @@ var RADIANS = Math.PI/180;
 var allBullets = {};
 var allCursors = {};
 
+var nextBullets = {};
+var nextCursors = {};
+
+var lastTime;
+
 
 function init() {
     // make canvas full screen
@@ -28,26 +33,41 @@ function init() {
 
     socket.emit('new cursor', myCursor);
 
+    lastTime = Date.now();
+
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+    animate();
+
     setInterval(function() { gameLoop() }, fps);
 }
 
 function gameLoop() {
+    var currentTime = Date.now();
+
+    var deltaTime = (currentTime - lastTime)/1000 
+
+    update(deltaTime);
+
+    lastTime = currentTime;
+}
+
+function update(delta) {
     for (var bullet in allBullets){
         checkCollisions(allBullets[bullet], bullet);
     }
-
-    // update positions+images on sreen
-    render();
 
     // change angle if keydown
     //  0 for no movement
     //  1 for spin clockwise
     //  2 for spin counter clockwise
     if (myCursor.spinning === 1) {
-        myCursor.angle += 3;
+        myCursor.angle += (300*delta);
     }
     else if (myCursor.spinning === 2) {
-        myCursor.angle -= 3;
+        myCursor.angle -= (300*delta);
     }
 
     // enforce a firing rate
@@ -88,13 +108,15 @@ function render(){
 
 function renderCursors() {
     for(var cursor in allCursors){
-        drawCursor(ctx, allCursors[cursor]);
+        drawCursor(ctx, allCursors[cursor], nextCursors[cursor]);
+        allCursors[cursor] = nextCursors[cursors];
     }
 }
 
 function renderBullets() {
     for (var bullet in allBullets){
         drawBullet(ctx, allBullets[bullet]);
+        allBullets[bullet] = nextBullets[bullet];
     }
 }
 
@@ -170,8 +192,8 @@ $(document).click(function(event){
 });
 
 socket.on('server update', function(newCursors, newBullets) {
-    allCursors = newCursors;
-    allBullets = newBullets;
+    nextCursors = newCursors;
+    nextBullets = newBullets;
 });
 
 init();
