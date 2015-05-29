@@ -56,27 +56,31 @@ io.on('connection', function(socket){
     });
 });
 
-function update(){
+function gameLoop(){
     var currentTime = Date.now();
 
     // caculate time since last update
     var deltaTime = (currentTime - lastTime)/1000;
 
+    update(deltaTime);
+}
+
+function update(delta) {
     for (var bullet in allBullets){
         if(allBullets[bullet].kill) {
             delete allBullets[bullet];
         }
         else{
             // checkCollisions(allBullets[bullet]);
-            updateBullets(deltaTime, allBullets[bullet]);
+            updateBullets(delta, allBullets[bullet]);
         }
     }
     io.emit('server update', allCursors, allBullets);
 }
 
 function updateBullets(delta, bullet) {
-    bullet.x -= 6*(Math.cos(bullet.angle*RADIANS+(3*Math.PI/8)));//*delta;
-    bullet.y -= 6*(Math.sin(bullet.angle*RADIANS+(3*Math.PI/8)));//*delta;
+    bullet.x -= 100*(Math.cos(bullet.angle*RADIANS+(3*Math.PI/8)))*delta;
+    bullet.y -= 100*(Math.sin(bullet.angle*RADIANS+(3*Math.PI/8)))*delta;
     if((bullet.y < 0 || bullet.y>1500) ||
        (bullet.x < 0 || bullet.x>1500)){
         bullet.kill = true;

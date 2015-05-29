@@ -28,14 +28,20 @@ var Cursor = function () {
 	this.health = 3;
 }
 
-drawCursor = function(ctx, cursor) {
+drawCursor = function(ctx, currentCursor, nextCursor) {
+	if(nextCursor.x != currentCursor.x) {
+		nextCursor.x = (nextCursor.x+currentCursor.x)/2;
+	}
+	if(nextCursor.y != currentCursor.y) {
+		nextCursor.y = (nextCursor.y+currentCursor.y)/2;
+	}
 	// stores current coordinate system
     ctx.save();
 
     // shift coordinate system, rotate, draw
-    ctx.translate(cursor.x, cursor.y);
-    ctx.rotate(cursor.angle * RADIANS);
-    ctx.drawImage(cursorPic, 0, 0, cursor.width, cursor.height);
+    ctx.translate(nextCursor.x, nextCursor.y);
+    ctx.rotate(nextCursor.angle * RADIANS);
+    ctx.drawImage(cursorPic, 0, 0, nextCursor.width, nextCursor.height);
 
     // return to old coorginate system
     ctx.restore();
