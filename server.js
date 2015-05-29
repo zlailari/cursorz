@@ -9,7 +9,7 @@ var updateRate = 30; // in ms
 var lastTime = Date.now();;
 
 // cursor locations/angles
-var allCursors={};
+var allCursors={}sdfadfsd breaking this;
 
 // keep track of bullet information
 var allBullets={};
